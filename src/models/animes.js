@@ -21,10 +21,10 @@ const Animes = sequelize.define("Animes", {
         type: DataTypes.FLOAT,
         validate: {
             min: 0,
-            max: 10
+            max: 5
         }
     },
-    imageURL: {
+    imageUrl: {
         type: DataTypes.STRING,
         validate: {
             isUrl: true
