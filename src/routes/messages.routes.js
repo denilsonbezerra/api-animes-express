@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const messagesController = require("../controllers/messages.controller");
-const tokenMiddleware = require("../middlewares/token");
 const messagesMiddleware = require("../middlewares/messages");
+const tokenMiddleware = require("../middlewares/token");
 
 router.post(
     "/message",
