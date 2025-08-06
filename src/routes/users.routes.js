@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const usersMiddleware = require("../middlewares/users");
-const usersController = require("../controllers/users");
+const usersController = require("../controllers/users.controller");
 const tokenMiddleware = require("../middlewares/token");
+const usersMiddleware = require("../middlewares/users");
 
 router.post(
     "/user",
