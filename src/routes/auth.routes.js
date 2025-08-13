@@ -1,18 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const animesController = require("../controllers/animes");
+const authController = require("../controllers/auth.controller");
 const tokenMiddleware = require("../middlewares/token");
 
-router.post(
-    "/anime",
-    tokenMiddleware.validateToken,
-    animesController.postAnime
-)
+router.post("/login", authController.login)
 
 router.get(
-    "/animes",
+    "/profile",
     tokenMiddleware.validateToken,
-    animesController.getAnimes
+    authController.profile
 )
 
 module.exports = router;

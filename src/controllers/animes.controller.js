@@ -1,11 +1,21 @@
 const { Animes } = require("../models");
+const redis = require("../config/redis");
 
 async function getAnimes(req, res) {
     try {
+        const cachedAnimes = await redis.get("animes")
+
+        if (cachedAnimes) {
+            return res.send(JSON.parse(cachedAnimes))
+        }
+
         const animes = await Animes.findAll()
-        res.send(animes)
+
+        await redis.set("animes", JSON.stringify(animes), { EX: 60 })
+
+        return res.send(animes)
     } catch (error) {
-        res.status(500).send({
+        return res.status(500).send({
             error: error.message
         })
     }
@@ -22,9 +32,10 @@ async function postAnime(req, res) {
 
     try {
         const newAnime = await Animes.create(anime)
-        res.status(201).send(newAnime)
+
+        return res.status(201).send(newAnime)
     } catch (error) {
-        res.status(500).send("Ocorreu um erro ao criar o anime:" + { error: error.message })
+        return res.status(500).send("Ocorreu um erro ao criar o anime:" + { error: error.message })
     }
 }
 

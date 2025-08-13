@@ -1,21 +1,27 @@
-const express = require("express");
-const cors = require("cors");
-const animesRoutes = require("./src/routes/animes");
-const usersRoutes = require("./src/routes/users");
-const authRoutes = require("./src/routes/auth");
-require('./src/models');
+const app = require('./src/app');
+const http = require('http');
+const { Server } = require('socket.io')
+const chatSocket = require('./src/sockets/chat')
 
-const app = express();
 const port = 3001;
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
+})
 
-app.use(cors())
+io.on('connection', (socket) => {
+    console.log("Novo cliente conectado:", socket.id)
 
-app.use(express.json())
+    chatSocket(io, socket)
+    
+    socket.on('disconnect', () => {
+        console.log("Cliente desconectado:", socket.id)
+    })
+})
 
-app.use(animesRoutes)
-app.use(usersRoutes)
-app.use(authRoutes)
-
-app.listen(port, () => {
-    console.log(`A API está sendo executada na porta http://localhost:${port}`)
+server.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 })

@@ -28,7 +28,7 @@ async function getUsers(req, res) {
 }
 
 async function getUser(req, res) {
-    if (req.user.role !== "admin") {
+    if (req.user.id !== req.params.id && req.user.role !== "admin") {
         return res.status(403).send({
             error: "Não autorizado!"
         })
@@ -49,8 +49,31 @@ async function getUser(req, res) {
     }
 }
 
+async function updateUser(req, res) {
+    if (req.user.id !== req.params.id && req.user.role !== "admin") {
+        return res.status(403).send({
+            error: "Não autorizado!"
+        })
+    }
+
+    try {
+        const user = await Users.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+
+        return res.send(user)
+    } catch (error) {
+        return res.status(500).send({
+            error: `Ocorreu um erro ao buscar o usuário: ${error.message} `
+        })
+    }
+}
+
 module.exports = {
     postUser,
     getUsers,
-    getUser
+    getUser,
+    updateUser
 }
