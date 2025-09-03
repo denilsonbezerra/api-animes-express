@@ -4,6 +4,12 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 async function login(req, res) {
+    /*
+    #swagger.tags = ['Auth']
+    #swagger.summary = 'Login de usuários'
+    #swagger.description = 'Esse endpoint é usado para logar um usuário.'
+    */
+
     const { email, password } = req.body;
 
     try {
@@ -40,10 +46,15 @@ async function login(req, res) {
 }
 
 function profile(req, res) {
+    /*
+    #swagger.tags = ['Auth']
+    #swagger.summary = 'Perfil do usuário'
+    #swagger.description = 'Esse endpoint é usado para retornar o perfil do usuário para o front-end.'
+    */
+
     const user = req.user;
 
     return res.send({
-        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role

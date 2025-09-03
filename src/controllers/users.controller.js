@@ -1,6 +1,12 @@
 const { Users } = require("../models");
 
 async function postUser(req, res) {
+    /*
+    #swagger.tags = ['Users']
+    #swagger.summary = 'Criar um usuário'
+    #swagger.description = 'Esse endpoint registra um usuário no banco de dados.'
+    */
+
     try {
         await Users.create(req.body)
 
@@ -11,6 +17,12 @@ async function postUser(req, res) {
 }
 
 async function getUsers(req, res) {
+    /*
+    #swagger.tags = ['Users']
+    #swagger.summary = 'Busca usuários'
+    #swagger.description = 'Esse endpoint retorna todos os usuários cadastrados.'
+    */
+
     try {
         if (req.user.role !== "admin") {
             return res.status(403).send({
@@ -28,6 +40,12 @@ async function getUsers(req, res) {
 }
 
 async function getUser(req, res) {
+    /*
+    #swagger.tags = ['Users']
+    #swagger.summary = 'Buscar um usuário'
+    #swagger.description = 'Esse endpoint busca um usuário específico.'
+    */
+
     if (req.user.id !== req.params.id && req.user.role !== "admin") {
         return res.status(403).send({
             error: "Não autorizado!"
@@ -50,6 +68,12 @@ async function getUser(req, res) {
 }
 
 async function updateUser(req, res) {
+    /*
+    #swagger.tags = ['Users']
+    #swagger.summary = 'Editar um usuário'
+    #swagger.description = 'Esse endpoint é usado para editar um usuário.'
+    */
+
     if (req.user.id !== req.params.id && req.user.role !== "admin") {
         return res.status(403).send({
             error: "Não autorizado!"
