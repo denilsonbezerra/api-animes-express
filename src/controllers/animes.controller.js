@@ -1,5 +1,5 @@
 const { Animes } = require("../models");
-const redis = require("../config/redis");
+// const redis = require("../config/redis");
 
 async function postAnime(req, res) {
     /*
@@ -45,15 +45,15 @@ async function getAnimes(req, res) {
     */
 
     try {
-        const cachedAnimes = await redis.get("animes")
+        // const cachedAnimes = await redis.get("animes")
 
-        if (cachedAnimes) {
-            return res.send(JSON.parse(cachedAnimes))
-        }
+        // if (cachedAnimes) {
+        //     return res.send(JSON.parse(cachedAnimes))
+        // }
 
         const animes = await Animes.findAll()
 
-        await redis.set("animes", JSON.stringify(animes), { EX: 60 })
+        // await redis.set("animes", JSON.stringify(animes), { EX: 60 })
 
         return res.send(animes)
     } catch (error) {
