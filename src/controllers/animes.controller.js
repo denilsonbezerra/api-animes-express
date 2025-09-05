@@ -1,4 +1,5 @@
 const { Animes } = require("../models");
+const { sendNewAnimeEmail } = require("../services/emails");
 // const redis = require("../config/redis");
 
 async function postAnime(req, res) {
@@ -8,8 +9,6 @@ async function postAnime(req, res) {
     #swagger.description = 'Esse endpoint registra um anime no banco de dados.'
     */
 
-    const anime = req.body;
-
     if (req.user.role !== "admin") {
         return res.status(403).send({
             error: "Não autorizado!"
@@ -17,9 +16,13 @@ async function postAnime(req, res) {
     }
 
     try {
-        const newAnime = await Animes.create(anime)
+        const anime = await Animes.create(req.body);
+        const adminName = req.user.name;
 
-        return res.status(201).send(newAnime)
+        await sendNewAnimeEmail(anime, adminName)
+            .catch((error) => console.error("Erro ao enviar o email:", error))
+
+        return res.status(201).send(anime)
     } catch (error) {
         return res.status(500).send("Ocorreu um erro ao criar o anime:" + { error: error.message })
     }
